@@ -3,9 +3,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 
 public class ExpenseTracker {
     public static void main(String[] args) {
@@ -76,7 +76,9 @@ public class ExpenseTracker {
 
         @Override //allows me to replace the unique that is printed with my own print
         public String toString(){
-            return "{Expense: " + id + "|\"" + description + "\"|" + category + "|$" + amt + "|" + date + "|}";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-dd-yyyy");
+            String formattedString = date.format(formatter);
+            return "{Expense: " + id + "|\"" + description + "\"|" + category + "|$" + amt + "|" + formattedString + "|}";
         }
 
         
@@ -119,16 +121,14 @@ private static void addExpense(Scanner scanner, ArrayList<Expense> expenses){
         scanner.nextLine();
 
         
-        System.out.println("When did you purchase it?   ");
+        System.out.println("When did you purchase it?(today, yesterday, yyyy-mm-dd)   ");
         String dateInput = scanner.nextLine();//scanner cannot take the values of the date 
         LocalDate date;//its declared so we dont keep declaring it 
         if(dateInput.equals("today") || dateInput.equals("Today")){
             date = LocalDate.now();//assigns value 
             //if I did local date date = LocalDate.now() it would be assigned within the if statement
-            System.out.println(LocalDate.now());
         }else if (dateInput.equals("yesterday") || dateInput.equals("Yesterday")){
             date = LocalDate.now().minusDays(1);
-            System.out.println(LocalDate.now().minusDays(1));
         }else{
             date = LocalDate.parse(dateInput);
             
